@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AskMeAnything (AMA) - Calm 3D AI Companion</title>
+    <meta name="description" content="AskMeAnything (AMA) is a calm, intelligent AI companion with soft 3D design, voice dictation, document & image intelligence, and personalized skill booster tips.">
+    <link rel="icon" type="image/png" href="/static/img/ama_logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Marked.js for markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Ambient Animated Background Lights -->
+    <div class="ambient-mesh">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="brand-group">
+                <!-- Unique 3D Logo Badge -->
+                <div class="logo-badge-3d" id="logoBadge" title="AskMeAnything AI">
+                    <div class="logo-glow-ring"></div>
+                    <img src="/static/img/ama_logo.png" alt="AMA Logo" class="brand-logo-img">
+                    <span class="online-pulse-dot" id="onlineIndicator"></span>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title-row">
+                        <h1 class="brand-title">AskMeAnything</h1>
+                        <span class="brand-pill">AMA</span>
+                    </div>
+                    <p class="brand-subtitle">
+                        <span class="status-badge-text">● Live</span>
+                        Calm AI Assistant • Powered by Groq
+                    </p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn-3d" id="btnSettings" title="API Key Settings">
+                    <i data-lucide="key-round"></i>
+                    <span class="status-dot" id="keyStatusDot"></span>
+                </button>
+                <button class="icon-btn-3d" id="btnClearChat" title="Reset Conversation">
+                    <i data-lucide="rotate-ccw"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- API Key Notice Banner (Conditional) -->
+        <div class="api-notice-banner" id="apiNoticeBanner" style="display: none;">
+            <div class="banner-content">
+                <i data-lucide="sparkles" class="banner-icon"></i>
+                <div class="banner-text">
+                    <strong>Welcome to AMA:</strong> Enter your Groq API Key to start chatting, uploading files, and receiving skill booster tips.
+                </div>
+            </div>
+            <button class="btn-banner-action" id="btnOpenKeyModal">Configure Key</button>
+        </div>
+
+        <!-- Chat Main Area -->
+        <main class="chat-viewport" id="chatViewport">
+            <div class="messages-container" id="messagesContainer">
+                <!-- Unique Welcome Card with 3D Logo Art -->
+                <div class="welcome-card" id="welcomeCard">
+                    <div class="hero-logo-container">
+                        <div class="hero-sphere-aura"></div>
+                        <div class="hero-logo-frame">
+                            <img src="/static/img/ama_logo.png" alt="AMA 3D Mascot Logo" class="hero-logo-3d">
+                        </div>
+                    </div>
+                    
+                    <h2 class="welcome-title">Ask Me Anything</h2>
+                    <p class="welcome-desc">
+                        Your calm space for clear answers, file analysis, and personalized skill-building. Speak your question or upload anything to get started.
+                    </p>
+
+                    <!-- Tactile 3D Starter Chips -->
+                    <div class="starter-grid">
+                        <button class="starter-card-3d" data-query="Explain quantum computing in simple, intuitive everyday terms.">
+                            <div class="starter-icon-wrap icon-teal">
+                                <i data-lucide="atom"></i>
+                            </div>
+                            <div class="starter-card-body">
+                                <strong>Explain Quantum Computing</strong>
+                                <span>Clear breakdown of complex physics</span>
+                            </div>
+                        </button>
+
+                        <button class="starter-card-3d" data-query="How can I improve my problem-solving and critical thinking skills in daily work?">
+                            <div class="starter-icon-wrap icon-purple">
+                                <i data-lucide="brain"></i>
+                            </div>
+                            <div class="starter-card-body">
+                                <strong>Boost Problem Solving</strong>
+                                <span>Sharpen logic &amp; decision-making</span>
+                            </div>
+                        </button>
+
+                        <button class="starter-card-3d" data-query="Review this uploaded document or image and provide 3 key actionable takeaways.">
+                            <div class="starter-icon-wrap icon-amber">
+                                <i data-lucide="file-check-2"></i>
+                            </div>
+                            <div class="starter-card-body">
+                                <strong>Document &amp; File Review</strong>
+                                <span>Inspect documents or code files</span>
+                            </div>
+                        </button>
+
+                        <button class="starter-card-3d" data-query="Give me a proven strategy to learn any new skill 2x faster.">
+                            <div class="starter-icon-wrap icon-rose">
+                                <i data-lucide="rocket"></i>
+                            </div>
+                            <div class="starter-card-body">
+                                <strong>Accelerated Learning</strong>
+                                <span>Proven techniques to master skills</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="scroll-bottom-btn" id="scrollBottomBtn" title="Scroll to latest message">
+                <i data-lucide="arrow-down"></i>
+            </button>
+        </main>
+
+        <!-- Bottom Controls & Input Area -->
+        <footer class="input-dock-container">
+            <!-- Upload & Dictation Status Overlay -->
+            <div class="dock-meta-bar" id="dockMetaBar">
+                <!-- Voice Recording Indicator with Animated Waves -->
+                <div class="dictation-pill" id="dictationPill" style="display: none;">
+                    <div class="voice-wave">
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                    </div>
+                    <span class="dictation-status-text" id="dictationStatusText">Listening to your voice... Speak now</span>
+                    <button class="pill-close-btn" id="btnStopDictation" title="Stop Dictation">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <!-- Attached File Preview Pill -->
+                <div class="attachment-pill" id="attachmentPill" style="display: none;">
+                    <div class="attachment-icon-wrap" id="attachmentIconWrap">
+                        <i data-lucide="file-text" id="attachmentGenericIcon"></i>
+                        <img id="attachmentThumbnail" class="attachment-thumb" alt="Preview" style="display: none;">
+                    </div>
+                    <div class="attachment-info">
+                        <span class="attachment-name" id="attachmentName">filename.png</span>
+                        <span class="attachment-size" id="attachmentSize">1.2 MB</span>
+                    </div>
+                    <button class="pill-close-btn" id="btnRemoveAttachment" title="Remove attachment">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Soft 3D Input Island -->
+            <div class="input-card-3d">
+                <!-- Hidden file selector -->
+                <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.md,.py,.js,.html,.css,.json,.csv,.xml,.yml,.sql" style="display: none;">
+
+                <!-- Attachment Button -->
+                <button class="dock-action-btn" id="btnAttachFile" title="Attach an Image or Document">
+                    <i data-lucide="paperclip"></i>
+                </button>
+
+                <!-- Voice Dictation Button -->
+                <button class="dock-action-btn mic-btn" id="btnToggleDictation" title="Click to Speak (Voice Dictation)">
+                    <i data-lucide="mic"></i>
+                </button>
+
+                <!-- Textarea Query Input -->
+                <div class="textarea-wrapper">
+                    <textarea 
+                        id="userQueryInput" 
+                        rows="1" 
+                        placeholder="Ask me anything, dictating by voice, or attach files..."
+                        autocomplete="off"
+                    ></textarea>
+                </div>
+
+                <!-- 3D Tactile Send Button -->
+                <button class="send-btn-3d" id="btnSend" title="Send Message (Enter)">
+                    <i data-lucide="arrow-up"></i>
+                </button>
+            </div>
+
+            <div class="dock-footnote">
+                <span>Press <strong>Enter</strong> to send • <strong>Shift + Enter</strong> for line break • Dictation &amp; File analysis active</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Drag & Drop Fullscreen Backdrop -->
+    <div class="dropzone-overlay" id="dropzoneOverlay">
+        <div class="dropzone-card-3d">
+            <div class="dropzone-sphere">
+                <i data-lucide="upload-cloud" class="dropzone-icon"></i>
+            </div>
+            <h3>Drop your file or image</h3>
+            <p>AMA will inspect the content and answer your questions directly</p>
+        </div>
+    </div>
+
+    <!-- Key Configuration Modal -->
+    <div class="modal-overlay" id="settingsModal" style="display: none;">
+        <div class="modal-card-3d">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <img src="/static/img/ama_logo.png" alt="AMA Logo" class="modal-logo-icon">
+                    <h3>Groq API Key Setup</h3>
+                </div>
+                <button class="modal-close-btn" id="btnCloseModal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">
+                    Your key is stored securely in your local <code>.env</code> file. You can obtain a fast, free key directly from the <a href="https://console.groq.com/keys" target="_blank" rel="noopener">Groq Developer Console</a>.
+                </p>
+                
+                <div class="input-group-3d">
+                    <label for="groqApiKeyInput">Groq API Key</label>
+                    <div class="key-input-container">
+                        <input type="password" id="groqApiKeyInput" placeholder="gsk_..." autocomplete="off">
+                        <button type="button" class="btn-toggle-eye" id="btnToggleKeyEye" title="Show/Hide Key">
+                            <i data-lucide="eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="key-status-indicator" id="modalKeyStatus">
+                    Checking configuration...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-3d-secondary" id="btnCancelModal">Cancel</button>
+                <button class="btn-3d-primary" id="btnSaveApiKey">Save Key to .env</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
